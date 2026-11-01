@@ -39,7 +39,7 @@
     const active = document.activeElement;
     placeCta();
     if (active === cta) cta.focus();
-    if (compact.matches && active?.closest('#primaryNav, #navTheme, #navSignIn')) toggle.focus();
+    if (compact.matches && active?.closest('#primaryNav, #navTheme')) toggle.focus();
     if (!compact.matches && active === toggle) header.querySelector('.nav-links a').focus();
     setOpen(false);
   });

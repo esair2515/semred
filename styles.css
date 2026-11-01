@@ -1121,13 +1121,7 @@ body.auth-body.mkt {
     min-width: var(--control-height);
     min-height: var(--control-height);
   }
-  #navSignIn {
-    grid-area: 3 / 3;
-    justify-self: end;
-    min-height: var(--control-height);
-    white-space: nowrap;
-  }
-  .nav[data-nav-ready="true"][data-nav-open="false"] :is(.nav-links, #navTheme, #navSignIn) {
+  .nav[data-nav-ready="true"][data-nav-open="false"] :is(.nav-links, #navTheme) {
     display: none;
   }
   .nav[data-nav-open="true"] .nav-menu-icon {
