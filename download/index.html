@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Download SemRed</title>
+  <link href="../app.css?v=contour-2" rel="stylesheet" />
+  <link href="../styles.css?v=contour-2" rel="stylesheet" />
+  <link href="../motion.css?v=contour-1" rel="stylesheet" />
+  <style>
+    .download-main { min-height: 100vh; display: grid; place-items: center; padding: 64px 24px; }
+    .download-wrap { width: min(100%, 760px); }
+    .download-heading { margin-bottom: 32px; }
+    .download-heading h1 { margin: 10px 0 12px; }
+    .download-heading p { max-width: 560px; color: var(--mkt-text-muted); }
+    .download-options { display: grid; gap: 14px; }
+    .download-option { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 22px 24px; border: 1px solid var(--mkt-border); border-radius: 16px; background: var(--mkt-surface); }
+    .download-option h2 { margin: 0 0 5px; font-size: 1.05rem; }
+    .download-option p { margin: 0; color: var(--mkt-text-muted); font-size: .92rem; }
+    .download-option .btn-primary { flex: 0 0 auto; }
+    .download-option .btn-primary:disabled { opacity: .52; cursor: not-allowed; transform: none; }
+    .download-back { display: inline-block; margin-top: 28px; }
+    @media (max-width: 560px) { .download-option { align-items: flex-start; flex-direction: column; gap: 16px; } }
+  </style>
+</head>
+<body class="mkt">
+  <main class="download-main">
+    <div class="download-wrap">
+      <header class="download-heading">
+        <span class="eyebrow eyebrow-accent">SemRed for desktop</span>
+        <h1>Download SemRed</h1>
+        <p>Choose your platform. Downloads will appear here when each release is ready.</p>
+      </header>
+      <section class="download-options" aria-label="Available platforms">
+        <article class="download-option">
+          <div><h2>macOS · Apple Silicon</h2><p>Download unavailable until release readiness is verified.</p></div>
+          <button class="btn-primary" type="button" disabled aria-disabled="true">Coming soon</button>
+        </article>
+        <article class="download-option">
+          <div><h2>Windows</h2></div>
+          <span class="eyebrow">Coming soon</span>
+        </article>
+        <article class="download-option">
+          <div><h2>Linux</h2></div>
+          <span class="eyebrow">Coming soon</span>
+        </article>
+      </section>
+      <a class="download-back arrow-link" href="../">← Back to SemRed</a>
+    </div>
+  </main>
+</body>
+</html>

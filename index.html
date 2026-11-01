@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Semred — Redaction with an Inspectable Safety Protocol</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="common.js?v=workspace-menu-3"></script>
+  <script src="motion.js?v=motion-2" defer></script>
+  <script src="hero-reveal.js?v=motion-2" defer></script>
+  <script src="navigation.js?v=nav-4" defer></script>
+  <script src="scroll-reveal.js?v=motion-2" defer></script>
+  <script src="hero-contour.js?v=contour-1" defer></script>
+  <script src="pipeline-player.js?v=motion-3" defer></script>
+  <script src="feature-glass.js?v=motion-2" defer></script>
+  <script src="protocol.js?v=protocol-2" defer></script>
+  <link href="app.css?v=contour-2" rel="stylesheet" />
+  <link href="styles.css?v=contour-2" rel="stylesheet" />
+  <link href="motion.css?v=contour-1" rel="stylesheet" />
+</head>
+<body class="mkt">
+  <!-- NAV -->
+  <header class="nav">
+    <div class="nav-inner">
+      <div class="nav-left">
+        <div class="logo">
+          <span class="logo-sem">SEM</span><span class="logo-red">RED</span>
+        </div>
+        <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="primaryNav navTheme navSignIn" aria-label="Open navigation">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+            <path class="nav-menu-icon" d="M4 8h16M4 16h16" />
+            <path class="nav-close-icon" d="m6 6 12 12M6 18 18 6" />
+          </svg>
+        </button>
+        <!-- One link per main section, in page order, so buyers can jump straight
+             to the part they came for. Below 1080px these fold into the menu. -->
+        <nav class="nav-links" id="primaryNav" aria-label="Primary navigation">
+          <a href="#security">Safety protocol</a>
+          <a href="#pipeline">How it works</a>
+          <a href="#product">Product</a>
+          <a href="#solutions">Solutions</a>
+          <a href="#pricing">Pricing</a>
+        </nav>
+      </div>
+      <div class="nav-right">
+        <div class="theme-switch" id="navTheme" data-theme-switch aria-label="Theme"></div>
+        <a href="./download/" class="nav-link" id="navSignIn">Download</a>
+        <a href="./download/" class="nav-cta">Download Now</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO. A centred headline over a live topographic field; the ticker below
+         carries entity cards through the Download Now button, which redacts them
+         as they pass. hero-contour.js draws both; the served HTML is complete
+         without it. -->
+    <section class="hero" aria-labelledby="heroTitle">
+      <canvas class="hero-contour" aria-hidden="true"></canvas>
+      <div class="shell hero-content">
+        <h1 id="heroTitle">
+          <span class="hero-line">Redact sensitive data.</span>
+          <span class="hero-line gradient-text">Keep control.</span>
+        </h1>
+        <p class="hero-subtitle">
+          Semred combines context-aware redaction with an inspectable safety protocol—from the first rule pass to the final export. Remove PHI, PII, and confidential detail while preserving meaning.
+        </p>
+      </div>
+      <div class="hero-ticker" data-hero-ticker>
+        <div class="hero-ticker-mask" aria-hidden="true"><div class="hero-ticker-track"></div></div>
+        <span class="hero-gate" aria-hidden="true"></span>
+        <a href="./download/" class="hero-cta">Download Now <span class="hero-cta-arrow" aria-hidden="true">→</span></a>
+      </div>
+      <div class="shell hero-below">
+        <a href="#security" class="hero-link">Explore the safety protocol <span class="hero-link-arrow" aria-hidden="true">→</span></a>
+        <p class="hero-footnote">Rules run on your host · External AI off by default · Leak-checked exports</p>
+      </div>
+    </section>
+
+    <!-- SAFETY PROTOCOL · promise strip. Four guarantees, each one enforced by the
+         service today; the same External AI badge appears in the workspace header. -->
+    <section class="strip promise" id="promise" aria-labelledby="promiseTitle">
+      <div class="shell promise-grid">
+        <div class="promise-lead" data-scroll-reveal="single">
+          <span class="eyebrow eyebrow-accent">Safety protocol</span>
+          <h2 id="promiseTitle">Your document has one way out, and you hold it.</h2>
+          <p>The reason teams cannot use a general‑purpose model is the reason Semred exists. Four guarantees hold on every run. <a href="#security" class="arrow-link">See the full protocol</a></p>
+        </div>
+        <ul class="promise-list" data-scroll-reveal="stagger" style="--reveal-delay: 80ms">
+          <li>
+            <svg class="promise-icon" viewBox="0 0 16 16" aria-hidden="true"><rect x="2.5" y="3" width="11" height="4" rx="1"/><rect x="2.5" y="9" width="11" height="4" rx="1"/><path d="M5 5h.01M5 11h.01"/></svg>
+            <b>Rules run on your host, first</b>
+            <span>Deterministic detection with no network call.</span>
+          </li>
+          <li>
+            <svg class="promise-icon" viewBox="0 0 16 16" aria-hidden="true"><rect x="3.5" y="7" width="9" height="6.5" rx="1.2"/><path d="M5.5 7V5.5a2.5 2.5 0 0 1 5 0V7"/></svg>
+            <b>External AI is off by default</b>
+            <span>Only an administrator can turn it on, and the run records that it ran.</span>
+          </li>
+          <li>
+            <svg class="promise-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="m8 2.5 6 3-6 3-6-3z"/><path d="m2 8.5 6 3 6-3M2 11.2l6 3 6-3"/></svg>
+            <b>A model never sees the original</b>
+            <span>If enabled, it receives text the rules have already redacted.</span>
+          </li>
+          <li>
+            <svg class="promise-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2l4.5 1.8v3.7c0 2.9-1.9 5.3-4.5 6.3-2.6-1-4.5-3.4-4.5-6.3V3.8z"/><path d="m5.8 8 1.5 1.5 3-3.2"/></svg>
+            <b>Every export is leak‑checked</b>
+            <span>Read back and compared with the records before it downloads.</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- SAFETY PROTOCOL · boundary map and clauses. Every clause is enforced by the
+         service as shipped (see docs/SECURITY_OPERATIONS.md); protocol.js only animates. -->
+    <section id="security" class="section section-raised protocol">
+      <div class="shell">
+        <div class="section-header" data-scroll-reveal="single">
+          <span class="eyebrow eyebrow-accent">Safety protocol</span>
+          <h2>Where your document goes. And where it never does.</h2>
+          <p>Redaction exists because the document cannot be sent anywhere. So Semred draws the boundary first and works inside it. Watch one document make the trip.</p>
+        </div>
+        <div class="boundary-map" id="boundaryMap" data-scroll-reveal="single">
+          <!-- The page that rides the map while it is on screen: redacted at the rule
+               pass, checked at review, turned away by the gate, sealed at export.
+               protocol.js only starts and stops it; with motion off it never appears. -->
+          <div class="boundary-flight" aria-hidden="true">
+            <div class="boundary-page">
+              <i class="w80"></i><i class="sp w60" data-cat="person"></i><i class="w70"></i><i class="sp w45" data-cat="temporal"></i><i class="w80"></i><i class="sp w35" data-cat="ident"></i><i class="w60"></i>
+              <span class="boundary-tick"><svg viewBox="0 0 16 16"><path d="m3.5 8.5 3 3 6-7"/></svg></span>
+              <span class="boundary-seal"><svg viewBox="0 0 16 16"><path d="M8 2l4.5 1.8v3.7c0 2.9-1.9 5.3-4.5 6.3-2.6-1-4.5-3.4-4.5-6.3V3.8z"/><path d="m5.8 8 1.5 1.5 3-3.2"/></svg></span>
+            </div>
+          </div>
+          <ol class="boundary-flow">
+            <li class="boundary-node is-host n1">
+              <svg class="boundary-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 2.5h4.8l2.7 2.7v8.3h-7.5z"/><path d="M9.2 2.6v2.7h2.7"/></svg>
+              <b>Your document</b><span>Imported into a private workspace on your host.</span>
+            </li>
+            <li class="boundary-conn" aria-hidden="true"></li>
+            <li class="boundary-node is-host n2">
+              <svg class="boundary-icon" viewBox="0 0 16 16" aria-hidden="true"><rect x="2.5" y="3" width="11" height="4" rx="1"/><rect x="2.5" y="9" width="11" height="4" rx="1"/><path d="M5 5h.01M5 11h.01"/></svg>
+              <b>Rule pass</b><span>Deterministic detection. Runs here, no network call.</span>
+            </li>
+            <li class="boundary-conn" aria-hidden="true"></li>
+            <li class="boundary-node is-host n3">
+              <svg class="boundary-icon" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4"/><path d="m10 10 3 3M5.5 7 6.7 8.2 8.8 6"/></svg>
+              <b>Your review</b><span>Every replacement listed and inspected before export.</span>
+            </li>
+            <li class="boundary-conn is-cut" aria-hidden="true"></li>
+            <li class="boundary-node is-gate n4">
+              <span class="boundary-lock">Off by default</span>
+              <svg class="boundary-icon" viewBox="0 0 16 16" aria-hidden="true"><rect x="3.5" y="7" width="9" height="6.5" rx="1.2"/><path d="M5.5 7V5.5a2.5 2.5 0 0 1 5 0V7"/></svg>
+              <b>External model</b><span>Opens only when an administrator sets the flag. Receives rule‑redacted text, never the original.</span>
+              <span class="boundary-door" aria-hidden="true"></span><span class="boundary-door-label" aria-hidden="true">Closed</span><span class="boundary-ring" aria-hidden="true"></span>
+            </li>
+            <li class="boundary-conn" aria-hidden="true"></li>
+            <li class="boundary-node is-host n5">
+              <svg class="boundary-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2l4.5 1.8v3.7c0 2.9-1.9 5.3-4.5 6.3-2.6-1-4.5-3.4-4.5-6.3V3.8z"/><path d="m5.8 8 1.5 1.5 3-3.2"/></svg>
+              <b>Leak‑checked export</b><span>Read back and compared with the records before it downloads.</span>
+            </li>
+          </ol>
+          <p class="boundary-host">Your host · nothing leaves without the flag</p>
+        </div>
+        <ol class="clauses" data-scroll-reveal="stagger" style="--reveal-delay: 80ms">
+          <li class="clause"><span class="clause-n">01</span><div><b>The rule pass runs on your host, first.</b><p>Deterministic detection runs before anything else and never makes a network call.</p></div><span class="clause-tag is-code">Enforced in code</span></li>
+          <li class="clause"><span class="clause-n">02</span><div><b>External AI is off until an administrator turns it on.</b><p>The semantic pass only runs when the deployment sets <code>SEMRED_ALLOW_EXTERNAL_LLM=true</code>. Each run records whether it did.</p></div><span class="clause-tag is-config">Admin setting</span></li>
+          <li class="clause"><span class="clause-n">03</span><div><b>A model, if enabled, sees rule‑redacted text. Never your original.</b><p>Stage two receives the stage‑one output, with names, identifiers and dates already replaced.</p></div><span class="clause-tag is-code">Enforced in code</span></li>
+          <li class="clause"><span class="clause-n">04</span><div><b>Logs hold no content.</b><p>No source text, prompts, model output or replacement mappings are written to service logs.</p></div><span class="clause-tag is-code">Enforced in code</span></li>
+          <li class="clause"><span class="clause-n">05</span><div><b>Every export is read back and checked for leaks.</b><p>TXT, DOCX and PDF exports are re‑extracted and compared against the records before they download. Residual data blocks the export.</p></div><span class="clause-tag is-code">Enforced in code</span></li>
+          <li class="clause"><span class="clause-n">06</span><div><b>Every run carries provenance, without content.</b><p>Policy fingerprint, detector and prompt versions, model name and validation state ship with each result.</p></div><span class="clause-tag is-code">Enforced in code</span></li>
+          <li class="clause"><span class="clause-n">07</span><div><b>What we do not claim.</b><p>PDF export writes a new text PDF. It does not scrub hidden layers, metadata or embedded images of an original PDF.</p></div><span class="clause-tag is-limit">Stated limit</span></li>
+        </ol>
+        <p class="clauses-foot">Deployment decisions that stay with you, such as identity provider, encrypted storage and retention, are listed in the security runbook we share with design partners. <a href="#contact" class="arrow-link">Discuss a deployment</a></p>
+      </div>
+    </section>
+
+    <!-- PIPELINE -->
+    <section id="pipeline" class="section section-raised">
+      <div class="shell">
+        <div class="pipeline-intro">
+          <div class="section-header" data-scroll-reveal="single">
+            <span class="eyebrow eyebrow-accent">Redaction lifecycle</span>
+            <h2>A staged, inspectable redaction lifecycle.</h2>
+            <p>Semred separates deterministic coverage from contextual review. Each applied change is inspectable, and the run records which stages actually completed.</p>
+          </div>
+          <!-- Shown by pipeline-player.js when motion is on. The section never
+               moves with scroll; only these controls play the walkthrough. -->
+          <div class="player-controls" id="pipelinePlayer" hidden>
+            <button type="button" class="btn-primary player-play" id="pipelinePlay" aria-pressed="false">
+              <svg class="player-play-icon" viewBox="0 0 10 11" aria-hidden="true">
+                <path class="icon-play" d="M1 1.2v8.6a.6.6 0 0 0 .9.5l7.3-4.3a.6.6 0 0 0 0-1L1.9.7A.6.6 0 0 0 1 1.2z" />
+                <path class="icon-pause" d="M1.8 1h2v9h-2zM6.2 1h2v9h-2z" />
+              </svg>
+              <span class="player-play-label">Play</span>
+            </button>
+            <label for="pipelineScrub">Scrub</label>
+            <input type="range" id="pipelineScrub" min="0" max="1000" value="0" />
+            <div class="player-tip" id="pipelineTip" role="status" hidden>
+              <span class="player-tip-dot" aria-hidden="true"></span>
+              <span>Press Play to see the other four stages · 7s</span>
+              <button type="button" class="player-tip-close" id="pipelineTipClose" aria-label="Dismiss tip">×</button>
+            </div>
+          </div>
+        </div>
+        <div class="pipeline" data-scroll-reveal="stagger" style="--reveal-delay: 80ms">
+          <article class="stage">
+            <h3>Detect</h3>
+            <p>Deterministic rules run first. When enabled, an LLM reviews the partially redacted text for contextual or indirect identifiers, and every proposed action is validated before application.</p>
+          </article>
+          <article class="stage">
+            <h3>Canonicalize</h3>
+            <p>Overlapping and duplicate spans are normalized within each stage, with stable labels and conservative conflict handling before that stage rewrites text.</p>
+          </article>
+          <article class="stage">
+            <h3>Rewrite</h3>
+            <p>Accepted spans are replaced locally with stable placeholders. Unchanged source text is preserved rather than silently regenerated.</p>
+          </article>
+          <article class="stage">
+            <h3>Score</h3>
+            <p>A similarity score compares the source and result. Embeddings are used when enabled and available; otherwise a deterministic lexical fallback is used. It is not a safety or coverage score.</p>
+          </article>
+          <article class="stage">
+            <h3>Audit</h3>
+            <p>Every applied replacement records its type, source value, replacement, stage, and review metadata. Audit trails can be exported as JSON or CSV.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURE ROWS -->
+    <section id="product" class="section">
+      <div class="shell">
+
+        <div class="feature" data-scroll-reveal="single">
+          <div class="feature-text">
+            <span class="eyebrow eyebrow-accent">Context, not regex</span>
+            <h2>It knows what the word is doing.</h2>
+            <p>A pattern matcher sees nine digits. Semred sees whether those digits are an SSN, a case number, or a quantity — and whether the sentence still works once they’re gone.</p>
+            <a href="#contact" class="arrow-link">Talk to us about your corpus</a>
+          </div>
+          <div class="feature-media">
+            <div class="frame">
+              <span class="frame-corner frame-corner-tl" aria-hidden="true"></span>
+              <span class="frame-corner frame-corner-tr" aria-hidden="true"></span>
+              <span class="frame-corner frame-corner-bl" aria-hidden="true"></span>
+              <span class="frame-corner frame-corner-br" aria-hidden="true"></span>
+              <div class="frame-inner">
+                <ul class="demo-list">
+                  <li class="demo-row">
+                    <span class="demo-type">Person</span>
+                    <span class="demo-from">Bob Smith</span>
+                    <span class="demo-to">→ [Patient A]</span>
+                  </li>
+                  <li class="demo-row">
+                    <span class="demo-type">Org</span>
+                    <span class="demo-from">Johns Hopkins</span>
+                    <span class="demo-to">→ [Hospital]</span>
+                  </li>
+                  <li class="demo-row">
+                    <span class="demo-type">Date</span>
+                    <span class="demo-from">March 12, 2024</span>
+                    <span class="demo-to">→ [Date]</span>
+                  </li>
+                  <li class="demo-row">
+                    <span class="demo-type">Condition</span>
+                    <span class="demo-from">cancer</span>
+                    <span class="demo-to">→ [Condition]</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <p class="frame-caption">Replacement records · inspector view</p>
+          </div>
+        </div>
+
+        <div class="feature feature-reverse" data-scroll-reveal="single">
+          <div class="feature-text">
+            <span class="eyebrow eyebrow-accent">Similarity scoring</span>
+            <h2>Measure what survived.</h2>
+            <p>Redaction that destroys meaning deserves review. Semred compares the source and result so you can spot substantial change; the score is a similarity signal, not proof of safe coverage.</p>
+            <a href="#limits" class="arrow-link">What the score does not mean</a>
+          </div>
+          <div class="feature-media">
+            <div class="frame">
+              <span class="frame-corner frame-corner-tl" aria-hidden="true"></span>
+              <span class="frame-corner frame-corner-tr" aria-hidden="true"></span>
+              <span class="frame-corner frame-corner-bl" aria-hidden="true"></span>
+              <span class="frame-corner frame-corner-br" aria-hidden="true"></span>
+              <div class="frame-inner">
+                <div class="demo-meter">
+                  <div class="meter-row">
+                    <div class="meter-head"><span>Discharge summary</span><b>0.94</b></div>
+                    <div class="meter-track"><div class="meter-fill" style="width: 94%"></div></div>
+                  </div>
+                  <div class="meter-row">
+                    <div class="meter-head"><span>Referral letter</span><b>0.91</b></div>
+                    <div class="meter-track"><div class="meter-fill" style="width: 91%"></div></div>
+                  </div>
+                  <div class="meter-row">
+                    <div class="meter-head"><span>Vendor contract</span><b>0.88</b></div>
+                    <div class="meter-track"><div class="meter-fill" style="width: 88%"></div></div>
+                  </div>
+                  <div class="meter-row">
+                    <div class="meter-head"><span>Support transcript</span><b>0.72</b></div>
+                    <div class="meter-track"><div class="meter-fill" style="width: 72%"></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p class="frame-caption">Illustrative sample. Similarity describes meaning, not coverage.</p>
+          </div>
+        </div>
+
+        <div class="feature" data-scroll-reveal="single">
+          <div class="feature-text">
+            <span class="eyebrow eyebrow-accent">Audit trail</span>
+            <h2>Every change, on the record.</h2>
+            <p>Each replacement carries its type, original value, substitute, and reason. Export the whole trail as JSON or CSV when compliance asks how a document got that way.</p>
+            <a href="#security" class="arrow-link">Where the data goes, and where it never does</a>
+          </div>
+          <div class="feature-media">
+            <div class="frame">
+              <span class="frame-corner frame-corner-tl" aria-hidden="true"></span>
+              <span class="frame-corner frame-corner-tr" aria-hidden="true"></span>
+              <span class="frame-corner frame-corner-bl" aria-hidden="true"></span>
+              <span class="frame-corner frame-corner-br" aria-hidden="true"></span>
+              <div class="frame-inner">
+                <div class="log-line">
+                  <span class="log-time">14:02:11</span>
+                  <span class="log-body"><b>PERSON</b> replaced · deterministic stage</span>
+                </div>
+                <div class="log-line">
+                  <span class="log-time">14:02:11</span>
+                  <span class="log-body"><b>ORG</b> proposed · semantic review accepted</span>
+                </div>
+                <div class="log-line">
+                  <span class="log-time">14:02:12</span>
+                  <span class="log-body"><b>DATE</b> replaced · rule matched</span>
+                </div>
+                <div class="log-line">
+                  <span class="log-time">14:02:12</span>
+                  <span class="log-body"><b>Export</b> blocked · source edited after last run</span>
+                </div>
+              </div>
+            </div>
+            <p class="frame-caption">Audit records · JSON and CSV export</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SOLUTIONS -->
+    <section id="solutions" class="section">
+      <div class="shell">
+        <div class="section-header" data-scroll-reveal="single">
+          <span class="eyebrow eyebrow-accent">Solutions</span>
+          <h2>For teams that can’t leak.</h2>
+          <p>Semred is designed for environments where a single exposed record is unacceptable.</p>
+        </div>
+        <div class="solution-grid" data-scroll-reveal="stagger" style="--reveal-delay: 80ms">
+          <article class="solution">
+            <h3>Healthcare</h3>
+            <p>De‑identify clinical notes, referrals, and messages while preserving the clinical detail that makes them useful downstream.</p>
+          </article>
+          <article class="solution">
+            <h3>Legal</h3>
+            <p>Sanitize contracts, discovery documents, and briefs before they reach vendors, co‑counsel, or a model.</p>
+          </article>
+          <article class="solution">
+            <h3>Enterprise</h3>
+            <p>Strip internal docs, tickets, and logs of identifying detail before they leave your environment.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- LIMITS -->
+    <section id="limits" class="section section-raised">
+      <div class="shell">
+        <div class="limits">
+          <div class="section-header" style="margin-bottom: 0">
+            <span class="eyebrow eyebrow-accent">Stated plainly</span>
+            <h2>What Semred does not claim.</h2>
+            <p>Redaction tools that promise completeness are the ones that get people hurt. Here is where our guarantees stop.</p>
+          </div>
+          <div class="limits-grid">
+            <div>
+              <h3>A high score is not safety</h3>
+              <p>Semantic similarity describes how much meaning survived. It says nothing about whether every sensitive span was found.</p>
+            </div>
+            <div>
+              <h3>Zero records is not a clean document</h3>
+              <p>An empty replacement list means nothing matched — not that there was nothing to match. Review still applies.</p>
+            </div>
+            <div>
+              <h3>Review stays in the loop</h3>
+              <p>Semred is built to make human review fast and evidence‑backed, not to remove it. Spans the model alone proposed are flagged as such.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA BAND -->
+    <section class="section-tight">
+      <div class="shell">
+        <div class="cta-band" data-scroll-reveal="single">
+          <h2>Have documents you can’t send anywhere?</h2>
+          <p>That’s the case we built this for. Tell us what you’re sitting on and we’ll show you what comes out the other side.</p>
+          <a href="#contact" class="btn-primary btn-lg">Request access</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section id="pricing" class="section">
+      <div class="shell">
+        <div class="section-header" data-scroll-reveal="single">
+          <span class="eyebrow eyebrow-accent">Pricing</span>
+          <h2>Start with a focused pilot.</h2>
+          <p>We work directly with teams that have real redaction problems — not toy demos. No self‑serve tier while we’re shaping the product around design partners.</p>
+        </div>
+        <div class="partner-card" data-scroll-reveal="single" style="--reveal-delay: 80ms">
+          <h3>Design partner</h3>
+          <p>Work directly with us to shape Semred around your workflows.</p>
+          <ul class="list">
+            <li><span>Pipeline tuned to your document types and entity taxonomy</span></li>
+            <li><span>Private deployment in your environment</span></li>
+            <li><span>Direct line to the people building it</span></li>
+            <li><span>Pricing agreed after the pilot, not before</span></li>
+          </ul>
+          <a href="#contact" class="btn-primary btn-full">Request access</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="section section-raised">
+      <div class="shell">
+        <div class="section-header" data-scroll-reveal="single">
+          <span class="eyebrow eyebrow-accent">Contact</span>
+          <h2>Talk to Semred.</h2>
+          <p>Share a bit about your use case and we’ll get in touch.</p>
+        </div>
+        <form class="contact-form">
+          <div class="form-row">
+            <div class="form-field">
+              <label for="contactEmail">Work email</label>
+              <input id="contactEmail" type="email" placeholder="you@company.com" />
+            </div>
+            <div class="form-field">
+              <label for="contactCompany">Company</label>
+              <input id="contactCompany" type="text" placeholder="Organization name" />
+            </div>
+          </div>
+          <div class="form-field">
+            <label for="contactMessage">What are you trying to protect?</label>
+            <textarea id="contactMessage" rows="4" placeholder="Clinical notes, contracts, internal docs, logs, etc."></textarea>
+          </div>
+          <button type="submit" class="btn-primary btn-lg">Submit</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="shell">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo">
+            <span class="logo-sem">SEM</span><span class="logo-red">RED</span>
+          </div>
+          <p>Context-aware redaction, backed by an inspectable safety protocol.</p>
+        </div>
+        <div class="footer-col">
+          <h3>Product</h3>
+          <ul>
+            <li><a href="./download/">Download Now</a></li>
+            <li><a href="#security">Safety protocol</a></li>
+            <li><a href="#pipeline">Pipeline</a></li>
+            <li><a href="#product">Capabilities</a></li>
+            <li><a href="#solutions">Solutions</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Trust</h3>
+          <ul>
+            <li><a href="#limits">Stated limits</a></li>
+            <li><a href="#security">Safety protocol</a></li>
+            <li><a href="#">Privacy</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Company</h3>
+          <ul>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="./download/">Download</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© Semred. All rights reserved.</span>
+        <span>Pre‑GA · working with design partners</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

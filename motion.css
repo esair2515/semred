@@ -1,0 +1,637 @@
+/* Motion layer: styles for motion.js and the four scripts that use it.
+ *
+ *   A  hero-contour.js      topographic hero field and redaction-gate ticker (styles.css)
+ *   B  pipeline-player.js   lifecycle player with Play / Scrub and first-visit tip
+ *   C  feature-glass.js     rotating frame, exploded layers, reviewer lens
+ *   D  workspace-motion.js  odometers, streamed results, record beams
+ *
+ * Every rule here either needs :root[data-motion="on"] or targets a class only
+ * those scripts add, so switching motion off (or reduced motion) gives back the
+ * served page. Colours come from the token blocks in app.css only. */
+
+@property --fx-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* ===================== A · hero ===================== */
+
+/* Headline: the existing entrance, with travel. hero-reveal.js still owns it. */
+@media (prefers-reduced-motion: no-preference) {
+  :root[data-motion="on"] [data-hero-reveal="running"] .hero-char {
+    display: inline-block;
+    animation-name: heroCharRise;
+    animation-timing-function: cubic-bezier(.2, .9, .25, 1.15);
+  }
+}
+@keyframes heroCharRise {
+  from { opacity: 0; transform: translateY(.45em) rotateX(70deg); filter: blur(6px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+
+/* ===================== B · lifecycle player ===================== */
+
+.pipeline-intro {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  column-gap: var(--space-8);
+}
+.player-controls {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-10);
+  font-size: var(--text-xs);
+  color: var(--mkt-text-muted);
+}
+.player-controls[hidden] {
+  display: none;
+}
+/* Filled like the page's other primary buttons; the accent shows only in the
+   first-visit breaths. The icon swaps between play and pause. */
+.player-play {
+  min-width: 96px;
+  transition: background-color .2s ease, border-color .2s ease, transform .25s cubic-bezier(.2, .9, .25, 1.15);
+}
+.player-play:active {
+  transform: scale(.94);
+}
+.player-play-icon {
+  flex: none;
+  width: 10px;
+  height: 11px;
+  fill: currentColor;
+  transition: transform .3s cubic-bezier(.2, .9, .25, 1.15);
+}
+.player-play:hover .player-play-icon {
+  transform: translateX(1px) scale(1.1);
+}
+.player-play .icon-pause,
+.player-play.is-playing .icon-play {
+  display: none;
+}
+.player-play.is-playing .icon-pause {
+  display: inline;
+}
+.player-controls input[type="range"] {
+  width: 160px;
+  accent-color: var(--accent-solid);
+}
+.player-play.is-breathing {
+  animation: fx-breathe 2.4s cubic-bezier(.65, 0, .28, 1) 3;
+}
+@keyframes fx-breathe {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent-solid) 45%, transparent); transform: scale(1); }
+  35% { transform: scale(1.035); }
+  70%, 100% { box-shadow: 0 0 0 14px color-mix(in srgb, var(--accent-solid) 0%, transparent); transform: scale(1); }
+}
+/* One line, right-aligned under the controls; --tip-caret (set by the player)
+   points the arrow at the Play button whatever the controls' width. */
+.player-tip {
+  position: absolute;
+  right: 0;
+  top: calc(100% + var(--space-3));
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  white-space: nowrap;
+  padding: 7px var(--space-2) 7px var(--space-3);
+  border: var(--border-width) solid var(--mkt-border);
+  border-radius: var(--radius-pill);
+  background: var(--mkt-surface);
+  box-shadow: var(--fx-hint-shadow);
+  font-size: var(--text-xs);
+  color: var(--mkt-text-muted);
+  animation: fx-tip-in .35s cubic-bezier(.65, 0, .28, 1) both;
+}
+.player-tip[hidden] {
+  display: none;
+}
+.player-tip.is-leaving {
+  animation: fx-tip-out .3s cubic-bezier(.65, 0, .28, 1) both;
+}
+.player-tip::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  right: calc(var(--tip-caret, 260px) - 4px);
+  width: 8px;
+  height: 8px;
+  background: inherit;
+  border-left: var(--border-width) solid var(--mkt-border);
+  border-top: var(--border-width) solid var(--mkt-border);
+  transform: rotate(45deg);
+}
+.player-tip-dot {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-round);
+  background: var(--accent-solid);
+}
+.player-tip-close {
+  width: 22px;
+  height: 22px;
+  border: 0;
+  border-radius: var(--radius-round);
+  background: transparent;
+  color: var(--mkt-text-faint);
+  cursor: pointer;
+  line-height: 1;
+}
+.player-tip-close:hover {
+  background: var(--mkt-surface-hover);
+}
+@keyframes fx-tip-in { from { opacity: 0; transform: translateY(-4px); } }
+@keyframes fx-tip-out { to { opacity: 0; transform: translateY(-4px); } }
+
+.is-player .shell {
+  position: relative;
+}
+.is-player .stage {
+  overflow: hidden;
+  transition: border-color .3s ease, transform .4s cubic-bezier(.2, .9, .25, 1.15);
+}
+.is-player .stage::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--gradient-brand);
+  transform: scaleX(var(--p, 0));
+  transform-origin: left;
+}
+.is-player .stage.is-active {
+  border-color: var(--accent-solid);
+  transform: translateY(-3px);
+}
+/* The copy stays in each card for assistive technology; sighted readers get it
+   one stage at a time in the line under the cards. */
+.is-player .stage p {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.is-player .stage h3 {
+  margin-bottom: 0;
+}
+.stage-jump {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  cursor: pointer;
+}
+.player-descs {
+  display: grid;
+  margin-top: var(--space-6);
+  min-height: 3.4em;
+}
+.player-desc {
+  grid-area: 1 / 1;
+  max-width: 760px;
+  font-size: var(--text-sm);
+  line-height: var(--line-relaxed);
+  color: var(--mkt-text-muted);
+}
+.player-desc b {
+  font-weight: var(--weight-medium);
+  color: var(--mkt-text);
+}
+.player-demo {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+}
+.player-doc,
+.player-meter,
+.player-log {
+  min-width: 0;
+  border: var(--border-width) solid var(--mkt-border);
+  border-radius: var(--radius-panel);
+  background: var(--mkt-surface);
+}
+.player-doc {
+  padding: var(--space-4);
+  font-size: var(--text-base);
+  line-height: 2.1;
+}
+.player-side {
+  display: grid;
+  gap: var(--space-3);
+  align-content: start;
+  min-width: 0;
+}
+.player-span {
+  position: relative;
+  display: inline-grid;
+  vertical-align: baseline;
+  border-radius: 4px;
+  transition: background-color .25s ease, box-shadow .25s ease, padding .25s ease;
+}
+.player-span:not(.is-hit) {
+  color: inherit;
+  background: transparent;
+}
+.player-span.is-hit {
+  padding-inline: 2px;
+  box-shadow: inset 0 -2px 0 var(--entity-border);
+}
+.player-from,
+.player-to {
+  grid-area: 1 / 1;
+  white-space: nowrap;
+}
+.player-from {
+  opacity: calc(1 - var(--flip, 0));
+  transform: translateY(calc(var(--flip, 0) * -70%));
+}
+.player-to {
+  opacity: var(--flip, 0);
+  transform: translateY(calc((1 - var(--flip, 0)) * 70%));
+}
+.player-tag {
+  position: absolute;
+  left: 0;
+  bottom: 100%;
+  padding: 2px 4px;
+  border-radius: 3px;
+  background: var(--entity-border);
+  color: var(--mkt-bg);
+  font-size: 9px;
+  letter-spacing: .1em;
+  line-height: 1;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s ease;
+}
+.player-span.is-tagged .player-tag {
+  opacity: 1;
+}
+.player-meter {
+  padding: var(--space-4);
+}
+.player-meter-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  color: var(--mkt-text-muted);
+}
+.player-meter-value {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-medium);
+  font-variant-numeric: tabular-nums;
+  color: var(--mkt-text);
+}
+.player-meter-track {
+  display: block;
+  height: 6px;
+  margin-top: var(--space-3);
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: var(--mkt-surface-strong);
+}
+.player-meter-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--gradient-brand);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+.player-log {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  padding: var(--space-3) var(--space-4);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+}
+.player-log-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-2);
+  opacity: 0;
+}
+.player-log-row time {
+  color: var(--mkt-text-faint);
+}
+.player-log .player-log-kind {
+  border: 0;
+  background: none;
+  color: var(--entity-color);
+}
+.player-particles {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* ===================== C · glass card ===================== */
+
+.fx-conic.is-spinning {
+  isolation: isolate;
+  background: conic-gradient(from var(--fx-angle), var(--fx-1), var(--fx-2), var(--fx-3), var(--fx-1));
+  animation: fx-spin 9s linear infinite;
+}
+.fx-conic.is-spinning::before {
+  content: '';
+  position: absolute;
+  inset: 8%;
+  z-index: -1;
+  border-radius: inherit;
+  background: inherit;
+  filter: blur(38px);
+  opacity: .55;
+}
+@keyframes fx-spin {
+  to { --fx-angle: 360deg; }
+}
+.glass-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+.glass-hint {
+  font-size: var(--text-xs);
+  color: var(--mkt-text-faint);
+}
+.glass-stage {
+  display: grid;
+  align-content: center;
+  min-height: 0;
+  margin-bottom: var(--space-4);
+  perspective: 1500px;
+  transition: min-height 1s cubic-bezier(.2, .9, .25, 1.15);
+}
+/* The open stack needs room above the record rows, as in the approved preview. */
+.glass-stage.is-exploded {
+  min-height: 236px;
+}
+.glass-stack {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 1s cubic-bezier(.2, .9, .25, 1.15);
+}
+.glass-layer {
+  position: relative;
+  padding: var(--space-4);
+  border: var(--border-width) solid var(--mkt-border);
+  border-radius: var(--radius-panel);
+  background: var(--mkt-inset);
+  font-size: var(--text-sm);
+  line-height: 2;
+  transition: transform 1s cubic-bezier(.2, .9, .25, 1.15), background-color .5s ease, box-shadow .5s ease;
+}
+.glass-layer + .glass-layer {
+  position: absolute;
+  inset: 0;
+}
+.glass-label {
+  position: absolute;
+  top: -11px;
+  left: 12px;
+  padding: 3px 7px;
+  border-radius: var(--radius-pill);
+  background: var(--color-action);
+  color: var(--color-on-action);
+  font-size: 10px;
+  letter-spacing: .12em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  opacity: 0;
+  transition: opacity .4s ease;
+}
+.glass-stage.is-exploded .glass-stack {
+  transform: rotateX(56deg) rotateZ(-26deg) scale(.8) translateY(-6%);
+}
+.glass-stage.is-exploded .glass-original {
+  transform: translateZ(-90px);
+}
+.glass-stage.is-exploded .glass-result {
+  transform: translateZ(90px);
+  box-shadow: var(--fx-lift);
+}
+.glass-stage.is-exploded .glass-layer {
+  background: color-mix(in srgb, var(--mkt-inset) 86%, transparent);
+}
+.glass-stage.is-exploded .glass-label {
+  opacity: 1;
+}
+.glass-cell {
+  display: inline-grid;
+  vertical-align: baseline;
+}
+.glass-cell > span {
+  grid-area: 1 / 1;
+  white-space: nowrap;
+}
+.glass-cell > .is-ghost {
+  visibility: hidden;
+}
+.glass-plain {
+  color: var(--mkt-text-faint);
+}
+.glass-entity {
+  border: var(--border-width) solid;
+  border-radius: 4px;
+}
+.glass-sensitive {
+  color: var(--color-sensitive-text);
+}
+.glass-redacted {
+  color: var(--mkt-redacted);
+}
+.glass-result {
+  cursor: crosshair;
+}
+.glass-lens {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  padding: var(--space-4);
+  border-radius: inherit;
+  background: var(--mkt-inset);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .25s ease;
+  -webkit-mask-image: radial-gradient(circle 64px at var(--lx, -100px) var(--ly, -100px), #000 97%, transparent 100%);
+  mask-image: radial-gradient(circle 64px at var(--lx, -100px) var(--ly, -100px), #000 97%, transparent 100%);
+}
+.glass-lens .glass-entity {
+  border-color: transparent;
+}
+.glass-ring {
+  position: absolute;
+  left: var(--lx);
+  top: var(--ly);
+  z-index: 5;
+  width: 128px;
+  height: 128px;
+  margin: -64px 0 0 -64px;
+  border-radius: var(--radius-round);
+  pointer-events: none;
+  opacity: 0;
+  box-shadow: 0 0 0 1px var(--accent-solid),
+    0 0 24px color-mix(in srgb, var(--accent-solid) 45%, transparent),
+    inset 0 0 18px color-mix(in srgb, var(--accent-solid) 30%, transparent);
+  transition: opacity .25s ease;
+}
+.glass-result.is-lensing .glass-lens,
+.glass-result.is-lensing .glass-ring {
+  opacity: 1;
+}
+
+/* ===================== D · dashboard and workspace ===================== */
+
+.odo-reader {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.odo {
+  display: inline-flex;
+  align-items: flex-start;
+  height: 1.15em;
+  overflow: hidden;
+  line-height: 1.15em;
+  vertical-align: bottom;
+  font-variant-numeric: tabular-nums;
+}
+.odo-col {
+  display: inline-flex;
+  flex-direction: column;
+  transition: transform 1.1s cubic-bezier(.65, 0, .28, 1);
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+.odo > span,
+.odo-col > span {
+  display: block;
+  height: 1.15em;
+  line-height: 1.15em;
+}
+:root[data-motion="on"] #sanitizeProgressFill {
+  background-image: linear-gradient(90deg, var(--accent-1), var(--accent-2), var(--accent-3), var(--accent-1));
+  background-size: 300% 100%;
+  box-shadow: 0 0 12px color-mix(in srgb, var(--accent-2) 60%, transparent);
+  animation: fx-flow 1.4s linear infinite;
+}
+@keyframes fx-flow {
+  to { background-position: -300% 0; }
+}
+.fx-flip {
+  display: inline-block;
+  animation: fx-flip .6s cubic-bezier(.2, .9, .25, 1.15) both;
+  animation-delay: calc(var(--i, 0) * 90ms);
+}
+@keyframes fx-flip {
+  from { opacity: 0; transform: translateY(8px) rotateX(-80deg); filter: blur(4px); }
+}
+.fx-slide {
+  animation: fx-slide .5s cubic-bezier(.2, .9, .25, 1.15) both;
+  animation-delay: calc(var(--i, 0) * 70ms + 300ms);
+}
+@keyframes fx-slide {
+  from { opacity: 0; transform: translateX(24px); }
+}
+:root[data-motion="on"] .workspace-shell {
+  position: relative;
+}
+.fx-beams {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+.fx-beam {
+  fill: none;
+  stroke: url(#fxBeamGradient);
+  stroke-width: 2;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 4px var(--beam-glow));
+}
+.fx-beam-flow {
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 4 18;
+  opacity: .9;
+  animation: fx-dash .9s linear infinite;
+}
+@keyframes fx-dash {
+  to { stroke-dashoffset: -22; }
+}
+
+/* ===================== narrow screens ===================== */
+
+@media (max-width: 900px) {
+  .player-demo {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .is-player .pipeline {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: var(--space-2);
+  }
+  .is-player .stage {
+    padding: var(--space-3) var(--space-2) var(--space-4);
+  }
+  .is-player .stage h3 {
+    font-size: var(--text-xs);
+    overflow-wrap: anywhere;
+  }
+  .player-controls {
+    margin-bottom: var(--space-8);
+  }
+}
+@media (max-width: 600px) {
+  .is-player .stage::before {
+    display: none;
+  }
+  .player-doc {
+    font-size: var(--text-sm);
+    line-height: 2;
+  }
+  .player-controls input[type="range"] {
+    width: 120px;
+  }
+  /* Room for the tip, which would otherwise cover the top of the cards. */
+  .player-controls {
+    margin-bottom: var(--space-10);
+  }
+  /* The controls sit on the left here, so the tip opens to the right of Play. */
+  .player-tip {
+    right: auto;
+    left: 0;
+    white-space: normal;
+  }
+  .player-tip::before {
+    right: auto;
+    left: 36px;
+  }
+}
