@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light dark" />
+  <title>SemRed beta access</title>
+  <script src="access.js"></script>
+  <link href="../app.css?v=contour-2" rel="stylesheet" />
+  <link href="../styles.css?v=contour-2" rel="stylesheet" />
+  <link href="../motion.css?v=contour-1" rel="stylesheet" />
+  <style>
+    .access-main { min-height: 100vh; display: grid; place-items: center; padding: 48px 24px; }
+    .access-card { width: min(100%, 440px); padding: 36px; border: 1px solid var(--mkt-border); border-radius: 20px; background: var(--mkt-surface); box-shadow: 0 24px 80px rgba(12, 16, 28, .12); }
+    .access-card .logo { margin-bottom: 28px; }
+    .access-card h1 { margin: 0 0 10px; }
+    .access-copy { margin: 0 0 26px; color: var(--mkt-text-muted); }
+    .access-form { display: grid; gap: 12px; }
+    .access-form label { font-weight: 600; }
+    .access-form input { width: 100%; min-height: 48px; padding: 0 14px; border: 1px solid var(--mkt-border); border-radius: 10px; background: var(--mkt-bg); color: var(--mkt-text); font: inherit; letter-spacing: .16em; }
+    .access-form button { width: 100%; margin-top: 6px; }
+    .access-error { min-height: 1.4em; margin: 0; color: #c83b46; font-size: .92rem; }
+    .access-back { display: inline-block; margin-top: 22px; }
+    @media (max-width: 520px) { .access-card { padding: 28px 22px; } }
+  </style>
+</head>
+<body class="mkt">
+  <main class="access-main">
+    <section class="access-card" aria-labelledby="accessTitle">
+      <a class="logo" href="../" aria-label="SemRed home"><span class="logo-sem">SEM</span><span class="logo-red">RED</span></a>
+      <h1 id="accessTitle">Private beta access</h1>
+      <p class="access-copy">Enter the access code to continue to SemRed downloads.</p>
+      <form id="accessCodeForm" class="access-form" method="post" action="#" novalidate>
+        <label for="accessCode">Access code</label>
+        <input id="accessCode" name="accessCode" type="password" inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" autocomplete="off" required aria-describedby="accessError" />
+        <p id="accessError" class="access-error" role="status" aria-live="polite"></p>
+        <button class="btn-primary" type="submit">Continue</button>
+      </form>
+      <a class="access-back arrow-link" href="../">← Back to SemRed</a>
+    </section>
+  </main>
+</body>
+</html>
